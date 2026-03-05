@@ -18,10 +18,10 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user) throw new Error("Invalid credentials");
+    if (!user) throw new Error("Credenciais inválidas");
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) throw new Error("Invalid credentials");
+    if (!valid) throw new Error("Credenciais inválidas");
 
     const token = jwt.sign(
       { userId: user.id },

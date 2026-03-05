@@ -17,14 +17,14 @@ router.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required" });
+    return res.status(400).json({ error: "Email ou senha são obrigatórias" });
   }
 
   try {
     const token = await authService.login(email, password);
     return res.json({ token });
   } catch {
-    return res.status(401).json({ error: "Invalid credentials" });
+    return res.status(401).json({ error: "Credenciais inválidas" });
   }
 });
 
@@ -34,7 +34,7 @@ router.post("/api/auth/register", async (req, res) => {
   if (!name || !email || !password) {
     return res
       .status(400)
-      .json({ error: "Name, email and password are required" });
+      .json({ error: "Nome, email e senha são obrigatórias" });
   }
 
   const user = await authService.register(name, email, password);
@@ -72,7 +72,7 @@ router.post("/api/links", async (req, res) => {
     return res.json(link);
   } catch (error) {
     console.error("Error in /api/links POST: ", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
 
@@ -98,7 +98,7 @@ router.put("/api/links/:id", async (req, res) => {
   const userId = (req as any).user.id;
 
   if (!destination) {
-    return res.status(400).json({ error: "Destination is required" });
+    return res.status(400).json({ error: "Destination é obrigatória" });
   }
 
   return await linksService.update(id, userId, destination);

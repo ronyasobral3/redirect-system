@@ -28,7 +28,7 @@ export async function authMiddleware(
     ) as TokenPayload;
 
     if (!decoded.userId || !decoded.iat) {
-      return res.status(401).json({ error: "Invalid token payload" });
+      return res.status(401).json({ error: "Token Invalido" });
     }
 
     const user = await prisma.user.findUnique({
@@ -36,7 +36,7 @@ export async function authMiddleware(
     });
 
     if (!user) {
-      return res.status(401).json({ error: "User not found" });
+      return res.status(401).json({ error: "Usuário não encontrado" });
     }
 
     if (
@@ -45,7 +45,7 @@ export async function authMiddleware(
     ) {
       return res
         .status(401)
-        .json({ error: "Session expirada. Please login again." });
+        .json({ error: "Session expirada. Por favor, faça login novamente." });
     }
 
     (req as any).user = {
@@ -55,6 +55,6 @@ export async function authMiddleware(
 
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Invalid or expired token" });
+    return res.status(401).json({ error: "Token inválido ou expirado" });
   }
 }

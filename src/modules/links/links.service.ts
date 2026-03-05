@@ -34,7 +34,7 @@ export class LinksService {
     });
 
     if (result.count === 0) {
-      throw new Error("Link not found or not authorized");
+      throw new Error("Link não encontrado ou não autorizado");
     }
 
     return { success: true };

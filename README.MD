@@ -1,4 +1,4 @@
-# Backend - Redirect System
+# Serviço - Redirect System
 
 ## Requisitos
 
@@ -28,7 +28,7 @@ docker ps
 
 ## 2. Configurar Variáveis de Ambiente
 
-Dentro da pasta `/backend`, crie um arquivo `.env`:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/redirectdb"
@@ -40,10 +40,7 @@ PORT=3001
 
 ## 3. Instalar Dependências
 
-Acesse a pasta do backend:
-
 ```bash
-cd backend
 npm install
 ```
 
@@ -90,7 +87,6 @@ npm start
 
 ```bash
 docker compose up -d
-cd backend
 npm install
 npx prisma migrate dev
 npm run dev
@@ -101,7 +97,7 @@ npm run dev
 ## Estrutura Esperada
 
 ```
-backend/
+redirect-system/
   src/
   prisma/
   package.json
