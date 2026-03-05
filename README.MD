@@ -116,7 +116,7 @@ backend/
 Acesse:
 
 ```
-GET http://localhost:3001/r/test
+GET http://localhost:3001/is-alive
 ```
 
-Deve retornar `404`, indicando que o servidor está funcionando corretamente.
+Deve retornar `OK`, indicando que o servidor está funcionando corretamente.
