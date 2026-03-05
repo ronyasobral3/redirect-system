@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  passwordChangedAt DateTime @default(now())
+  links     RedirectLink[]
+  createdAt DateTime @default(now())
+}
+
+model RedirectLink {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  title         String?
+  destination   String
+  status        Boolean  @default(true)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
