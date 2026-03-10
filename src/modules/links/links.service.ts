@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import crypto from "crypto";
-import { stat } from "fs";
-
 const prisma = new PrismaClient();
 
 function generateSlug(length = 7) {
@@ -61,6 +59,15 @@ export class LinksService {
         status: true,
       },
       where: { slug },
+    });
+  }
+
+  async delete(id: string, userId: string) {
+    await prisma.redirectLink.deleteMany({
+      where: {
+        id,
+        userId,
+      },
     });
   }
 }
