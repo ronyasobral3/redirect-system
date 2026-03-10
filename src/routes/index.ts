@@ -21,8 +21,8 @@ router.post("/api/auth/login", async (req, res) => {
   }
 
   try {
-    const token = await authService.login(email, password);
-    return res.json({ token });
+    const result = await authService.login(email, password);
+    return res.json(result);
   } catch {
     return res.status(401).json({ error: "Credenciais inválidas" });
   }
@@ -52,7 +52,7 @@ router.get("/r/:slug", async (req, res) => {
     return res.status(404).json({ error: "Não encontrado" });
   }
 
-  return res.redirect(302, link.destination);
+  return res.status(200).json({ location: link.destination });
 });
 
 // ================= PROTECTED ROUTES =================
@@ -102,6 +102,14 @@ router.put("/api/links/:id", async (req, res) => {
   }
 
   return await linksService.update(id, userId, destination);
+});
+
+router.delete("/api/links/:id", async (req, res) => {
+  const { id } = req.params;
+  const userId = (req as any).user.id;
+
+  await linksService.delete(id, userId);
+  return res.json({ success: true });
 });
 
 export default router;
