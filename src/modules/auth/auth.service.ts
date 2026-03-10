@@ -29,7 +29,7 @@ export class AuthService {
       { expiresIn: "1d" },
     );
 
-    return token;
+    return { token: token, userName: user.name };
   }
 
   async updatePassword(userId: string, newPassword: string) {
