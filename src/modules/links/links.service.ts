@@ -22,13 +22,13 @@ export class LinksService {
     return link;
   }
 
-  async update(id: string, userId: string, destination: string) {
+  async update(id: string, userId: string, title: string, destination: string) {
     const result = await prisma.redirectLink.updateMany({
       where: {
         id,
         userId,
       },
-      data: { destination },
+      data: { title, destination },
     });
 
     if (result.count === 0) {
@@ -49,6 +49,19 @@ export class LinksService {
         updatedAt: true,
       },
       where: { userId },
+      orderBy: { title: "asc" },
+    });
+  }
+
+  async getLinkById(id: string, userId: string) {
+    return prisma.redirectLink.findUnique({
+      select: {
+        id: true,
+        slug: true,
+        destination: true,
+        title: true,
+      },
+      where: { id, userId },
     });
   }
 
@@ -58,7 +71,7 @@ export class LinksService {
         destination: true,
         status: true,
       },
-      where: { slug },
+      where: { slug, status: true },
     });
   }
 
@@ -69,5 +82,21 @@ export class LinksService {
         userId,
       },
     });
+  }
+
+  async updateStatus(id: string, userId: string, status: boolean) {
+    const result = await prisma.redirectLink.updateMany({
+      where: {
+        id,
+        userId,
+      },
+      data: { status },
+    });
+
+    if (result.count === 0) {
+      throw new Error("Link não encontrado ou não autorizado");
+    }
+
+    return { success: true };
   }
 }
