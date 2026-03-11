@@ -5,8 +5,8 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: redirectdb
+      POSTGRES_USER: process.env.POSTGRES_USER
+      POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD
+      POSTGRES_DB: process.env.POSTGRES_DB
     ports:
       - "5432:5432"
