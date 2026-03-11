@@ -48,8 +48,10 @@ router.get("/r/:slug", async (req, res) => {
 
   const link = await linksService.getLinkBySlug(slug);
 
-  if (!link || !link.status) {
-    return res.status(404).json({ error: "Não encontrado" });
+  if (!link) {
+    return res
+      .status(404)
+      .json({ error: "Não encontrado", errorCode: "NOT_FOUND" });
   }
 
   return res.status(200).json({ location: link.destination });
@@ -92,16 +94,24 @@ router.get("/api/links", async (req, res) => {
   return res.json(links);
 });
 
+router.get("/api/links/:id", async (req, res) => {
+  const { id } = req.params;
+  const userId = (req as any).user.id;
+
+  const links = await linksService.getLinkById(id, userId);
+  return res.json(links);
+});
+
 router.put("/api/links/:id", async (req, res) => {
   const { id } = req.params;
-  const { destination } = req.body;
+  const { title, destination } = req.body;
   const userId = (req as any).user.id;
 
   if (!destination) {
     return res.status(400).json({ error: "Destination é obrigatória" });
   }
 
-  return await linksService.update(id, userId, destination);
+  return await linksService.update(id, userId, title, destination);
 });
 
 router.delete("/api/links/:id", async (req, res) => {
@@ -109,6 +119,15 @@ router.delete("/api/links/:id", async (req, res) => {
   const userId = (req as any).user.id;
 
   await linksService.delete(id, userId);
+  return res.json({ success: true });
+});
+
+router.post("/api/links/inactive/:id", async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+  const userId = (req as any).user.id;
+
+  await linksService.updateStatus(id, userId, isActive);
   return res.json({ success: true });
 });
 
