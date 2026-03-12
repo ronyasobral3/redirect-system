@@ -41,6 +41,27 @@ router.post("/api/auth/register", async (req, res) => {
   return res.json(user);
 });
 
+router.post("/api/auth/update/password", async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = (req as any).user.id;
+
+  try {
+    await authService.validPassword(userId, currentPassword);
+    await authService.updatePassword(userId, newPassword);
+    return res.status(200);
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+});
+
+router.delete("/api/auth/user", async (req, res) => {
+  const userId = (req as any).user.id;
+
+  await linksService.deleteAllByUserId(userId);
+  await authService.deleteByUserId(userId);
+  return res.status(200);
+});
+
 // ================= PUBLIC REDIRECT =================
 
 router.get("/r/:slug", async (req, res) => {
