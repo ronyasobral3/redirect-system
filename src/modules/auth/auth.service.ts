@@ -29,7 +29,16 @@ export class AuthService {
       { expiresIn: "1d" },
     );
 
-    return { token: token, userName: user.name };
+    return { token: token, userName: user.name, email: user.email };
+  }
+
+  async validPassword(id: string, password: string) {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (!user) throw new Error("Credenciais inválidas");
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) throw new Error("Credenciais inválidas");
   }
 
   async updatePassword(userId: string, newPassword: string) {
@@ -39,8 +48,14 @@ export class AuthService {
       where: { id: userId },
       data: {
         password: hash,
-        passwordChangeAt: new Date(),
+        passwordChangedAt: new Date(),
       },
+    });
+  }
+
+  async deleteByUserId(id: string) {
+    prisma.user.delete({
+      where: { id },
     });
   }
 }
