@@ -99,4 +99,12 @@ export class LinksService {
 
     return { success: true };
   }
+
+  async deleteAllByUserId(userId: string) {
+    await prisma.redirectLink.deleteMany({
+      where: {
+        userId,
+      },
+    });
+  }
 }
